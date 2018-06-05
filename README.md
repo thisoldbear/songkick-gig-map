@@ -2,6 +2,11 @@
 
 A React app using the [Songkick API](https://www.songkick.com/developer) to plot gigs on a map based on a selected location.
 
+## Feature Roadmap
+
+- Add event info modal
+- Add location search input
+- Add date picker to filter results
 
 ## Installation
 
