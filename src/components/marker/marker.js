@@ -15,6 +15,10 @@ class Marker extends Component {
     };
 
     this.marker = new google.maps.Marker(config);
+
+    this.marker.addListener('click', (e) => {
+      this.props.eventSelected(this.props.id);
+    });
   }
 
   render() {

@@ -43,7 +43,7 @@ class Map extends Component {
         displayName, location, id
       } = event;
 
-      return React.cloneElement(<Marker />, {
+      return React.cloneElement(<Marker eventSelected={this.props.eventSelected} />, {
         map: this.map,
         google: window.google,
         position: {
@@ -52,6 +52,7 @@ class Map extends Component {
         },
         title: displayName,
         key: id,
+        id: id,
       });
     });
   }
