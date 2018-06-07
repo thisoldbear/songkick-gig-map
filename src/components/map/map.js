@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Marker from './marker';
+import Marker from './../marker/marker';
 
 class Map extends Component {
   init() {

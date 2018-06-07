@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import config from '../config.js';
 
-import Map from '../components/map';
+import Map from '../components/map/map';
 
 class App extends Component {
   constructor(props) {
