@@ -12,19 +12,19 @@ class App extends Component {
 
     this.state = {
       coords: {
-        mapStart: {
-          lat: 51.454514,
-          lng: -2.587910,
-        },
+        lat: null,
+        lng: null,
       },
       events: [],
       loading: false,
       selectedEvent: null,
     }
 
-    ///  Methods passed down as props to chidren
+    ///  Bind methods
     this.makeApiRequests = this.makeApiRequests.bind(this);
     this.eventSelected = this.eventSelected.bind(this);
+    this.geolocationSuccess = this.geolocationSuccess.bind(this);
+    this.geolocationError = this.geolocationError.bind(this);
   }
 
   makeRequestForMetroAreaId(lat, lng) {
@@ -73,9 +73,39 @@ class App extends Component {
     });
   }
 
+  renderMap() {
+    return React.cloneElement(<Map
+      mapStart={this.state.coords}
+      makeRequest={this.makeApiRequests}
+      eventSelected={this.eventSelected}
+      events={this.state.events}
+    />);
+  }
+
+  geolocationSuccess(pos) {
+    const {latitude, longitude} = pos.coords;
+
+    this.setState({
+      coords: {
+        lat: latitude,
+        lng: longitude,
+      }
+    });
+  }
+
+  geolocationError() {
+    console.log('error');
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(this.geolocationSuccess, this.geolocationError);
+  }
+
   render() {
     return (
       <div className={`app ${this.state.loading ? ' loading' : ''}`}>
+        { this.state.coords.lat !== null ? this.renderMap() : 'Loading...' };
+
         <Overlay>
           {this.state.selectedEvent ? (
             <Event details={this.state.selectedEvent} />
@@ -83,12 +113,6 @@ class App extends Component {
             <h1>Songkick Gig Map</h1>
           )}
         </Overlay>
-        <Map
-          mapStart={this.state.coords.mapStart}
-          makeRequest={this.makeApiRequests}
-          eventSelected={this.eventSelected}
-          events={this.state.events}
-        />
       </div>
     );
   }
