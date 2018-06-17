@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import config from '../config.js';
 
 import Map from '../components/map/map';
+import Overlay from '../components/overlay/overlay';
+import Event from '../components/event/event';
 
 class App extends Component {
   constructor(props) {
@@ -17,9 +19,12 @@ class App extends Component {
       },
       events: [],
       loading: false,
+      selectedEvent: null,
     }
 
+    ///  Methods passed down as props to chidren
     this.makeApiRequests = this.makeApiRequests.bind(this);
+    this.eventSelected = this.eventSelected.bind(this);
   }
 
   makeRequestForMetroAreaId(lat, lng) {
@@ -58,12 +63,30 @@ class App extends Component {
     });
   }
 
+  eventSelected(id) {
+    const event = this.state.events.filter(event => {
+      return event.id === id;
+    });
+
+    this.setState({
+      selectedEvent: event[0],
+    });
+  }
+
   render() {
     return (
       <div className={`app ${this.state.loading ? ' loading' : ''}`}>
+        <Overlay>
+          {this.state.selectedEvent ? (
+            <Event details={this.state.selectedEvent} />
+          ) : (
+            <h1>Songkick Gig Map</h1>
+          )}
+        </Overlay>
         <Map
           mapStart={this.state.coords.mapStart}
           makeRequest={this.makeApiRequests}
+          eventSelected={this.eventSelected}
           events={this.state.events}
         />
       </div>
