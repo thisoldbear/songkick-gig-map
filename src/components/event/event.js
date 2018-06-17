@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 
 class Event extends Component {
   render() {
+    const { details } = this.props;
+
     return (
       <div className="event">
-        <h2>{ this.props.details.displayName }</h2>
-        <p>{ this.props.details.location.city }</p>
-        <p>{ this.props.details.start.date }</p>
-        <a href={ this.props.details.uri }>View details on Songkick</a>
+        <h2>{ details.displayName }</h2>
+        <p>{ details.location.city }</p>
+        <p>{ details.start.date }</p>
+        <a href={ details.uri }>View details on Songkick</a>
       </div>
     )
   }
