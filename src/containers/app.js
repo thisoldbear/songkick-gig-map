@@ -5,6 +5,7 @@ import config from '../config.js';
 import Map from '../components/map/map';
 import Overlay from '../components/overlay/overlay';
 import Event from '../components/event/event';
+import DateFilter from '../components/date-filter/date-filter';
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class App extends Component {
       events: [],
       loading: false,
       selectedEvent: null,
+      minDate: null,
+      maxDate: null,
     }
 
     ///  Bind methods
@@ -25,6 +28,8 @@ class App extends Component {
     this.eventSelected = this.eventSelected.bind(this);
     this.geolocationSuccess = this.geolocationSuccess.bind(this);
     this.geolocationError = this.geolocationError.bind(this);
+    this.onMinDateChange = this.onMinDateChange.bind(this);
+    this.onMaxDateChange = this.onMaxDateChange.bind(this);
   }
 
   makeRequestForMetroAreaId(lat, lng) {
@@ -73,12 +78,30 @@ class App extends Component {
     });
   }
 
+  onMinDateChange(date) {
+    console.log('onMinDateChange', date);
+
+    this.setState({
+      minDate: date
+    });
+  }
+
+  onMaxDateChange(date) {
+    console.log('onMaxDateChange', date);
+
+    this.setState({
+      maxDate: date
+    });
+  }
+
   renderMap() {
     return React.cloneElement(<Map
       mapStart={this.state.coords}
       makeRequest={this.makeApiRequests}
       eventSelected={this.eventSelected}
       events={this.state.events}
+      minDate={this.state.minDate}
+      maxDate={this.state.maxDate}
     />);
   }
 
@@ -113,6 +136,8 @@ class App extends Component {
             <h1>Songkick Gig Map</h1>
           )}
         </Overlay>
+
+        <DateFilter onMinDateChange={this.onMinDateChange} onMaxDateChange={this.onMaxDateChange} />
       </div>
     );
   }

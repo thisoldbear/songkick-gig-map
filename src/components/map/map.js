@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Marker from './../marker/marker';
+import { EventEmitter } from 'eventemitter3';
 
 class Map extends Component {
   init() {
@@ -38,23 +39,27 @@ class Map extends Component {
       return;
     }
 
-    return this.props.events.map(event => {
-      const {
-        displayName, location, id
-      } = event;
+    /// Filter against minDate and maxDate
+    return this.props.events
+      .filter(event => this.props.minDate !== undefined ? event.start.date >= this.props.minDate : event)
+      .filter(event => this.props.maxDate !== undefined ? event.start.date <= this.props.maxDate: event)
+      .map(event => {
+        const {
+          displayName, location, id
+        } = event;
 
-      return React.cloneElement(<Marker eventSelected={this.props.eventSelected} />, {
-        map: this.map,
-        google: window.google,
-        position: {
-          lat: location.lat,
-          lng: location.lng
-        },
-        title: displayName,
-        key: id,
-        id: id,
+        return React.cloneElement(<Marker eventSelected={this.props.eventSelected} />, {
+          map: this.map,
+          google: window.google,
+          position: {
+            lat: location.lat,
+            lng: location.lng
+          },
+          title: displayName,
+          key: id,
+          id: id,
+        });
       });
-    });
   }
 
   render() {
